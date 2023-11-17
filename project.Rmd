@@ -14,7 +14,7 @@ The LEGO dataset is a comprehensive collection of information containing various
 # Data cleaning and summary
 Our group has chosen to use data from the ‘inventory_parts’ ,’inventories’,’sets’ and ‘colors’ dataset to come up with the three visualisations in the following portion. In part_colors,  left_join() was used to join the first inventory_parts and colors datasets using their color_id and subsequently used the select() to omit columns which were redundant and would not be required in the visualisations. The similar process was done to obtain part_colors_set but this time the left_join was used to join part_colors, with the inventories dataset ,and finally another left_join() once more  joining  part_colors_set to the sets dataset .
 
-Summary: Upon analysis of our cleaned dataset, we found that there are 13509 unique sets across 436 distinct themes. There are 204 unique colours, and amidst this, the colour "Black" stands as the colour most frequently used, while "Duplo Medium Green" is the rarest. The LEGO sets span from 1949 to 2022, with the average number of parts hovering around 694. Interestingly, we also found that there are some sets with 0 parts. This suggests anomalies or inaccurate data collection.
+Upon analysis of our cleaned dataset, we found that there are 13509 unique sets across 436 distinct themes. There are 204 unique colours, and amidst this, the colour "Black" stands as the colour most frequently used, while "Duplo Medium Green" is the rarest. The LEGO sets span from 1949 to 2022, with the average number of parts hovering around 694. Interestingly, we also found that there are some sets with 0 parts. This suggests anomalies or inaccurate data collection.
 
 ### Importing libraries and loading datasets
 ```{r data loading}
