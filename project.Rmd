@@ -85,7 +85,7 @@ ggplot(color_theme_life_span, aes(x = name, y = start_year)) +
   coord_flip() +
   labs(title = "Consistency of Colors in LEGO sets",
       subtitle = "Life span of all colors from 1949 to 2022",
-       x = "Colors", y = "Years",
+       x = "Colors", y = "Year",
       caption = "Figure 1") +
   theme_minimal() +
   theme(axis.text.y = element_blank(),
