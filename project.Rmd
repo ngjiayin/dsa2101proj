@@ -83,12 +83,14 @@ ggplot(color_theme_life_span, aes(x = name, y = start_year)) +
   geom_segment(aes(xend = name, y = start_year, yend = end_year, color = I(rgb))) +
   geom_point(shape = ".", aes(color = I(rgb))) +
   coord_flip() +
-  labs(title = "Consistency of Colours in LEGO sets",
-      subtitle = "Life span of all colours from 1949 to 2022",
-       x = "Colours", y = "Years") +
+  labs(title = "Consistency of Colors in LEGO sets",
+      subtitle = "Life span of all colors from 1949 to 2022",
+       x = "Colors", y = "Years",
+      caption = "Figure 1") +
   theme_minimal() +
   theme(axis.text.y = element_blank(),
-        axis.ticks.y = element_blank())
+        axis.ticks.y = element_blank(),
+        plot.caption = element_text(hjust = 0.5, size = 10))
 ```
 
 For this line segment plot, we decided to look at the lifespan of the colors in the lego data set over the years from 1949 to 2022. For each color, we determined the year it was introduced to the end of its existence. From the plot, it is clear that even though the number of colors introduced over time has increased, the lifespan of the colors introduced later became shorter. The first few colors introduced were the basic and primary colors such as Black, White, Red, Yellow, and Blue.
@@ -104,7 +106,11 @@ names(all_rbg) = all_rbg
 
 num_unique_year %>%
   ggplot(aes(x=year, fill = I(rgb)))+
-  geom_bar()
+  geom_bar() +
+  labs(title = "Number of unique colors across the years",
+       x = "Year", y = "Count",
+       caption = "Figure 2") +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10))
 ```
 
 The bar plot shows the number of unique colours in Lego sets in each year, from 1949 to 2022. Each bar is filled with the original Lego bricks' colours produced. There is an increase in the variety of colours from the beginning to early 2000s, with a sudden spike in 1963 (further explained in the Discussion section). The variety then decreases drastically before increasing gradually again.
@@ -132,7 +138,11 @@ ggplot(data = data) +
   xlim(1980, 2022) +
   scale_color_manual(values = paste0("#", top_10_colors_rgb)) +
   geom_smooth(aes(x = year, y = n, color = name_color), se = FALSE, size = 0.5) +
-  labs(x = "Year", y = "Count", title = "Distribution of the top 10 colors across the year", color = "Colors")
+  labs(title = "Distribution of the top 10 colors across the years",
+       x = "Year", y = "Count", 
+       color = "Colors",
+       caption = "Figure 3") +
+  theme(plot.caption = element_text(hjust = 0.5, size = 10))
 ```
 
 For this scatter plot, our group has decided to focus on years after 1980 only, as the observations of those before 1980 were relatively small and cluttered, making it difficult to establish any meaningful relationships or trends. We chose to focus on the top 10 most popular colors only for the same reasons.
