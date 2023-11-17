@@ -1,0 +1,197 @@
+---
+title: "project"
+output: html_document
+date: "2023-11-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tidyverse)
+colors = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/colors.csv.gz')
+inventories = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/inventories.csv.gz')
+inventory_parts = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/inventory_parts.csv.gz')
+sets = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/sets.csv.gz')
+```
+
+```{r}
+sets %>%
+  left_join(themes, by = c("theme_id" = "id"), suffix = c("_sets", "_themes")) %>%
+  count(name_themes, sort = T)
+
+sets_themes =
+  sets %>%
+  select(-set_num, -img_url) %>%
+  left_join(themes, by = c("theme_id" = "id"), suffix = c("_sets", "_themes")) %>%
+  left_join(themes, by = "parent_id")
+%>%
+  
+top_10 = sets_themes %>%
+  count(parent_id, sort = TRUE) %>% ## top 10 parent themes are aggregated from all years
+  head(10)
+
+  # group_by(year) %>%
+  # filter(year > 1952) %>%
+  # group_by(parent_id) %>%
+  # arrange(year) %>%
+  # select(-set_num, -img_url) %>%
+
+df4 = df2 %>%
+  filter(parent_id %in% df3$parent_id) %>%
+  arrange(parent_id) %>%
+  mutate(parent_id = as.factor(parent_id), decade = cut(year, breaks = seq(1952, 2023, by = 10), labels = FALSE, right = FALSE)) %>%
+  group_by(decade) %>%
+  arrange(decade, year)
+
+```
+
+
+
+```{r}
+ggplot(data = df4, aes(x = parent_id, y = num_parts)) +
+  geom_col() 
+
+# stacked colour bar across years/decades x: year, y: num_parts. fill: colour
+# top 10 themes: associated colours
+# 
+```
+
+
+```{r}
+# the relationship is colour across time, then we pick different aspects of colour to focus on
+# the relationship links are: colors > inventory_parts > inventories > inventories_sets > sets. so the object we will focus on lego set, makes sense?
+
+sum(is.na(inventory_parts$color_id))
+sum(is.na(df1$name))
+
+# done by kelly:
+df1 = left_join(inventory_parts,colors,  by = (c("color_id" = "id")), suffix = c("_ip", "_colors"))
+df1 <- df1%>%
+  select(-is_spare,-img_url,-is_trans)
+df2 = left_join(df1, inventories, by = c("inventory_id" = "id"))
+df2 <- df2 %>%
+  select(-version) %>%
+  group_by(color_id) %>%
+  arrange(color_id)%>%
+  group_by(part_num)
+df3 <- left_join(df2,sets,by= c("set_num" = "set_num") ) %>%
+  select(-img_url)%>%
+  rename(color_name = name.x)%>%
+  rename(set_name = name.y)
+# df3
+```
+
+```{r}
+part_colors = inventory_parts %>%
+  left_join(colors, by = c("color_id" = "id")) %>%
+  select(-is_spare, -img_url, -is_trans)
+
+sum(is.na(parts_colors)) #no missing values
+
+part_colors_set = parts_colors %>%
+  left_join(inventories, by = c("inventory_id" = "id")) %>% #added "version" and "set_num"
+  left_join(sets, by = "set_num", suffix = c("_color", "_set")) %>% #added "name_set" "year" "theme_id" "num_parts" "img_url"
+  select(-version, -img_url)
+head(part_colors_set)
+```
+
+```{r}
+# line plot: unique colours against time
+num_unique_year = part_colors_set %>%
+  mutate(rgb = paste0("#", rgb)) %>%
+  distinct(name_color, rgb, year) 
+# %>%
+  # group_by(name_color, rgb, year) %>%
+  # na.omit() %>%
+  # summarise(color_count = n())
+num_unique_year
+
+palette = unique(num_unique_year$rgb)
+names(palette) = unique(palette)
+
+all_rbg = num_unique_year$rgb
+names(all_rbg) <- all_rbg
+
+# head(colors)
+# num_colors<-length(unique(colors$name))
+# paste("Number of Unique colors in Lego sets =",num_colors)
+new_colors <- colors%>%mutate(rgb=paste0("#",str_trim(rgb)))
+all_rbg = new_colors$rgb
+names(all_rbg) <- all_rbg
+
+num_unique_year %>%
+  ggplot(aes(x=year))+
+  geom_bar()+
+  # ggplot(aes(x = year, fill = rgb)) +
+  # geom_bar() + 
+  scale_fill_manual(values = all_rbg)
+
+
+
+```
+
+```{r}
+# 1949 to 2022
+ggplot(data = num_unique_year, aes(x = year, y = n)) + 
+  geom_line() + 
+  geom_point(color = "red", size = 1.2) +
+  scale_x_continuous(breaks = seq(1940, 2023, 10)) +
+  labs(title = "Unique Colours in Lego Sets", 
+       subtitle = "Yearly number of unique colours from 1949 to 2022", 
+       x = "Year", y = "Number of Unique Colours")
+  
+part_colors_set %>% #unusual peak is because of Modulex
+  filter(year == 1963) %>%
+  distinct(name_color) 
+#useful link: https://groovyhistory.com/lego-modulex-architect-bricks-1963/4
+```
+```
+
+
+```{r}
+
+
+```
+
+
+```{r}
+# find most popular x colours from the entire data set
+top_10_colors = part_colors_set %>%
+  count(name_color) %>%
+  arrange(desc(n)) %>%
+  head(7) %>%
+  pull(name_color)
+
+# df that contains the number of observations, for the above top 10 colours, for each year
+data = part_colors_set %>%
+  filter(name_color %in% top_10_colors) %>%
+  count(year, name_color, wt = quantity)
+
+ggplot(data = data) +
+  geom_point(aes(x = year, y = n, color = name_color, fill = )) +
+  xlim(1980, 2022) +
+  # scale_color_manual(values = c("Black" = "black",
+                               # "Blue" = "blue",
+                               # "Dark Bluish Gray" = "lightsteelblue4",
+                               # "Light Bluish Gray" = "lightsteelblue3",
+                               # "Light Gray" = "gray",
+                               # "Red" = "red",
+                               # "Reddish Brown" = "brown",
+                               # "Tan" = "tan",
+                               # "White" = "white",
+                               # "Yellow" = "yellow")) +
+  geom_smooth(aes(x = year, y = n, color = name_color), se = FALSE) +
+  labs(x = "Year", y = "Count", title = "Distribution of the top 10 colors across the years") +
+  theme(legend.position = "none")
+```
+
+
+
