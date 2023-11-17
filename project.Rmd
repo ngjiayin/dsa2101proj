@@ -5,13 +5,13 @@ output: html_document
 Members: Hyunji Lim, Kelly Tan Jing Ying, Liu Yu Xuan, Ng Hannah, Ng Jia Yin
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-## Introduction
+# Introduction
 The LEGO dataset is a comprehensive collection of information containing various aspects of LEGO products. this emcompasses elements, colors, inventories, minifigures, parts, sets, themes and their relationships. There are 12 interrelated datasets that include details about LEGO products such as types of element, inventories of sets and parts and attributes of minifigures.
 
-## Data Cleaning and Summary
+# Data cleaning and summary
 Cleaning: Our group has chosen to use data from the ‘inventory_parts’ ,’inventories’,’sets’ and ‘colors’ dataset to come up with the three visualisations in the following portion. In df1, we used left_join() to join the first two datasets (namely the inventory_parts and colors dataset) using their color_id and omitted the na values to keep the relevant rows only, then we used the select() to omit columns which were redundant and would not be required in the visualisations. The similar process was done to obtain df2 but this time the left_join was used to join df1 with an additional dataset(inventories),and repeated once more to get df3( by joining df2 to the final dataset we will use, which is the sets dataset)
 
 Summary: Upon analysis of our cleaned dataset, we found that there are 13509 unique sets across 436 distinct themes. There are 204 unique colours, and amidst this, the colour "Black" stands as the colour most frequently used, while "Duplo Medium Green" is the rarest. The LEGO sets span from 1949 to 2022, with the average number of parts hovering around 694. Interestingly, we also found that there are some sets with 0 parts. This suggests anomalies or inaccurate data collection.
@@ -58,8 +58,8 @@ summary_stats = part_colors_set %>%
 summary_stats
 ```
 
-## Visualisations
-### Line Plot
+# Visualisations
+### Line segment grqph
 ```{r line segment graph}
 # Find the lifespan of the colors 
 color_id_year_range = part_colors_set %>%
@@ -108,7 +108,7 @@ num_unique_year %>%
 
 The bar plot shows the number of unique colours in Lego sets in each year, from 1949 to 2022. Each bar is filled with the original Lego bricks' colours produced. There is an increase in the variety of colours from the beginning to early 2000s, with a sudden spike in 1963 (further explained in the Discussion section). The variety then decreases drastically before increasing gradually again.
 
-### Scatter Plot
+### Scatter plot 
 ```{r scatter plot}
 # find most popular 10 colours from data set
 top_10_colors = part_colors_set %>%
@@ -137,11 +137,10 @@ ggplot(data = data) +
 For this scatter plot, our group has decided to focus on years after 1980 only, as the observations of those before 1980 were relatively small and cluttered, making it difficult to establish any meaningful relationships or trends. We chose to focus on the top 10 most popular colors only for the same reasons.
 This is a plot of count against time, with each data point representing the number of lego pieces of that color for a particular year. We added a LOESS curve for each color as well to make it easier for us to identify the general trends.
 
+# Discussions
 
-## Discussions
 
-
-## References
+# References
 Georgios Karamanis. (2022). LEGO dataset [Data set]. TidyTuesday. https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-09-06
 
 
