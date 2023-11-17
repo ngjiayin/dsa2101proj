@@ -63,11 +63,39 @@ summary_stats
 ```
 
 
-```{r}
+```{r line plot}
+# Find the lifespan of the colors 
+color_id_year_range = part_colors_set %>%
+  filter(!is.na(year)) %>%
+  group_by(color_id) %>%
+  summarise(year_range = paste(min(year, na.rm = TRUE), "-", max(year, na.rm = TRUE)))  
 
+color_id_life_span = color_id_year_range %>%
+  separate(year_range, into = c("start_year", "end_year"), convert = TRUE ) %>%
+  mutate(lifespan = `end_year` - `start_year` + 1 ) %>%
+  arrange(lifespan) %>%
+  select(color_id, start_year, end_year, lifespan) 
 
+color_theme_life_span = color_id_life_span %>%
+  left_join(colors, by = c("color_id"="id")) %>%
+  mutate(name = reorder(name, desc(lifespan))) %>%
+  mutate(rgb = paste0("#", rgb))
+
+# Plot 
+ggplot(color_theme_life_span, aes(x = name, y = start_year)) +
+  geom_segment(aes(xend = name, y = start_year, yend = end_year, color = I(rgb))) +
+  geom_point(shape = ".", aes(color = I(rgb))) +
+  coord_flip() +
+  labs(title = "Life Span of Colours in Lego Dataset over the years",
+       x = "Colours", y = "Years") +
+  theme_minimal() +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
 ```
 
+For this line segment plot, we decided to look at the lifespan of the colors in the lego data set over the years from 1949 to 2022. For each color, we determined the year it was introduced to the end of its existence. From the plot, it is clear that even though the number of colors introduced over time has increased, the lifespan of the colors introduced later became shorter. The "Vintage" colors such as Black, White, Red, Yellow, Green, Blue were introduced as the first few lego colors and were kept.
+
+From the plot, it shows an increase in the number of colours at the start of early 2000s however a sudden decrease after a few years around 2007.
 
 ```{r scatterplot}
 # find most popular 10 colours from data set
