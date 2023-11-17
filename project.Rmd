@@ -9,10 +9,10 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
 # Introduction
-The LEGO dataset is a comprehensive collection of information containing various aspects of LEGO products. this emcompasses elements, colors, inventories, minifigures, parts, sets, themes and their relationships. There are 12 interrelated datasets that include details about LEGO products such as types of element, inventories of sets and parts and attributes of minifigures.
+The LEGO datasets are a comprehensive collection of information that various aspects of LEGO products. They are made up of 12 interrelated comma-separated variables (csv) files that report on LEGO elements, colors, inventories, minifigures, parts, sets, themes. The question we seek to answer is: How have the colors of LEGO sets change over time? Color is a crucial element of LEGO as it contributes to the functionality, aesthetics and distinctiveness of LEGO builds.
 
-# Data cleaning and summary
-Our group has chosen to use data from the ‘inventory_parts’ ,’inventories’,’sets’ and ‘colors’ dataset to come up with the three visualisations in the following portion. In part_colors,  left_join() was used to join the first inventory_parts and colors datasets using their color_id and subsequently used the select() to omit columns which were redundant and would not be required in the visualisations. The similar process was done to obtain part_colors_set but this time the left_join was used to join part_colors, with the inventories dataset ,and finally another left_join() once more  joining  part_colors_set to the sets dataset .
+# Data Cleaning and Summary
+Our group has chosen to use data from the ‘inventory_parts’,’inventories’,’sets’ and ‘colors’ dataset to come up with the three visualisations in the following portion. In part_colors,  left_join() was used to join the first inventory_parts and colors datasets using their color_id and subsequently used the select() to omit columns which were redundant and would not be required in the visualisations. The similar process was done to obtain part_colors_set but this time the left_join was used to join part_colors, with the inventories dataset, and finally another left_join() once more  joining  part_colors_set to the sets dataset.
 
 Upon analysis of our cleaned dataset, we found that there are 13509 unique sets across 436 distinct themes. There are 204 unique colours, and amidst this, the colour "Black" stands as the colour most frequently used, while "Duplo Medium Green" is the rarest. The LEGO sets span from 1949 to 2022, with the average number of parts hovering around 694. Interestingly, we also found that there are some sets with 0 parts. This suggests anomalies or inaccurate data collection.
 
@@ -59,7 +59,7 @@ summary_stats
 ```
 
 # Visualisations
-### Line segment grqph
+### Line plot
 ```{r line segment graph}
 # Find the lifespan of the colors 
 color_id_year_range = part_colors_set %>%
@@ -83,7 +83,8 @@ ggplot(color_theme_life_span, aes(x = name, y = start_year)) +
   geom_segment(aes(xend = name, y = start_year, yend = end_year, color = I(rgb))) +
   geom_point(shape = ".", aes(color = I(rgb))) +
   coord_flip() +
-  labs(title = "Life Span of Colours in Lego Dataset over the years",
+  labs(title = "Consistency of Colours in LEGO sets",
+      subtitle = "Life span of all colours from 1949 to 2022",
        x = "Colours", y = "Years") +
   theme_minimal() +
   theme(axis.text.y = element_blank(),
@@ -92,7 +93,7 @@ ggplot(color_theme_life_span, aes(x = name, y = start_year)) +
 
 For this line segment plot, we decided to look at the lifespan of the colors in the lego data set over the years from 1949 to 2022. For each color, we determined the year it was introduced to the end of its existence. From the plot, it is clear that even though the number of colors introduced over time has increased, the lifespan of the colors introduced later became shorter. The first few colors introduced were the basic and primary colors such as Black, White, Red, Yellow, and Blue.
 
-### Bar Graph
+### Bar graph
 ```{r bar graph}
 num_unique_year = part_colors_set %>%
   mutate(rgb = paste0("#", rgb)) %>%
