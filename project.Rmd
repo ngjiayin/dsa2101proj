@@ -36,14 +36,14 @@ part_colors_year = part_colors %>%
   left_join(inventories, by = c("inventory_id" = "id")) %>% #added "version" and "set_num"
   left_join(sets, by = "set_num", suffix = c("_color", "_set")) %>% #added "name_set" "year" "theme_id" "num_parts" "img_url"
   select(-version, -img_url)
-head(part_colors_set)
+head(part_colors_year)
 ```
 
 Upon analysis of our cleaned dataset, we found that there are 13509 unique sets across 436 distinct themes. There are 204 unique colours, and amidst this, the colour "Black" stands as the colour most frequently used, while "Duplo Medium Green" is the rarest. The LEGO sets span from 1949 to 2022, with the average number of parts hovering around 694. Interestingly, we also found that there are some sets with 0 parts. This suggests anomalies or inaccurate data collection.
 
 ### Summary statistics
 ```{r summary stats}
-summary_stats = part_colors_set %>%
+summary_stats = part_colors_year %>%
   summarise(
     num_of_uniq_themes = n_distinct(theme_id),
     num_of_uniq_sets = n_distinct(name_set),
@@ -62,7 +62,7 @@ summary_stats
 ### Line plot
 ```{r line segment graph}
 # Find the lifespan of the colors 
-color_id_year_range = part_colors_set %>%
+color_id_year_range = part_colors_year %>%
   filter(!is.na(year)) %>%
   group_by(color_id) %>%
   summarise(year_range = paste(min(year, na.rm = TRUE), "-", max(year, na.rm = TRUE)))  
@@ -97,7 +97,7 @@ For this line segment plot, we decided to look at the lifespan of the colors in 
 
 ### Bar graph
 ```{r bar graph}
-num_unique_year = part_colors_set %>%
+num_unique_year = part_colors_year %>%
   mutate(rgb = paste0("#", rgb)) %>%
   distinct(name_color, rgb, year)
 
@@ -118,7 +118,7 @@ The bar plot shows the number of unique colours in Lego sets in each year, from 
 ### Scatter plot 
 ```{r scatter plot}
 # find most popular 10 colours from data set
-top_10_colors = part_colors_set %>%
+top_10_colors = part_colors_year %>%
   count(name_color, rgb) %>%
   arrange(desc(n)) %>%
   head(10)
@@ -127,7 +127,7 @@ top_10_colors_names = top_10_colors %>% pull(name_color)
 top_10_colors_rgb = top_10_colors %>% arrange(name_color) %>% pull(rgb)
 
 # df that contains the number of observations, for the above top 10 colours, for each year
-data = part_colors_set %>%
+data = part_colors_year %>%
   filter(name_color %in% top_10_colors_names) %>%
   count(year, name_color, wt = quantity)
 head(data)
