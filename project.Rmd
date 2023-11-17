@@ -108,8 +108,8 @@ num_unique_year %>%
 
 The bar plot shows the number of unique colours in Lego sets in each year, from 1949 to 2022. Each bar is filled with the original Lego bricks' colours produced. There is an increase in the variety of colours from the beginning to early 2000s, with a sudden spike in 1963 (further explained in the Discussion section). The variety then decreases drastically before increasing gradually again.
 
-### Scatterplot 
-```{r scatterplot}
+### Scatter plot 
+```{r scatter plot}
 # find most popular 10 colours from data set
 top_10_colors = part_colors_set %>%
   count(name_color, rgb) %>%
@@ -134,8 +134,9 @@ ggplot(data = data) +
   labs(x = "Year", y = "Count", title = "Distribution of the top 10 colors across the year", color = "Colors")
 ```
 
-For this scatterplot, our group has decided to focus on years after 1980 only, as the observations of those before 1980 were relatively small and cluttered, making it difficult to establish any meaningful relationships or trends. We chose to focus on the top 10 most popular colors only for the same reasons.
+For this scatter plot, our group has decided to focus on years after 1980 only, as the observations of those before 1980 were relatively small and cluttered, making it difficult to establish any meaningful relationships or trends. We chose to focus on the top 10 most popular colors only for the same reasons.
 This is a plot of count against time, with each data point representing the number of lego pieces of that color for a particular year. We added a LOESS curve for each color as well to make it easier for us to identify the general trends.
+
 
 
 
