@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
 # Introduction
-The LEGO datasets are a comprehensive collection of information that various aspects of LEGO products. They are made up of 12 interrelated comma-separated variables (csv) files that report on LEGO elements, colors, inventories, minifigures, parts, sets, themes. The question we seek to answer is: How have the colors of LEGO sets change over time? Color is a crucial element of LEGO as it contributes to the functionality, aesthetics and distinctiveness of LEGO builds.
+The LEGO datasets are a comprehensive collection of information that various aspects of LEGO products. They are made up of 12 interrelated comma-separated variables (csv) files that report on LEGO elements, colors, inventories, minifigures, parts, sets, themes. The question we seek to answer is: **How have the colors of LEGO sets change over time?** Color is a crucial element of LEGO as it contributes to the functionality, aesthetics and distinctiveness of LEGO builds.
 
 # Data Cleaning and Summary
 To answer our question, we would need to create a dataframe that consists of LEGO parts, their colour names and RGB codes, as well as years.
@@ -24,7 +24,7 @@ sets = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytu
 inventory_sets = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/inventory_sets.csv.gz')
 ```
 
-First, we merged the `inventory_parts` and `colours` datasets using a left_join(), with the common variable being the parts' `colour_id`. We then omitted redundant columns and stored this in a variable named `part_colors`. Next, to retrieve the `year` variable, we merged the dataframe `part_colors` with `inventories` using the common variable `inventory_id`, then merged with the `sets` dataframe using the common variable `set_num`. We used left_join() for both merges, as the `part_colors` is the main dataframe and stored the resulting dataframe in the variable `part_colors_year`.
+First, we merged the `inventory_parts` and `colours` datasets using a `left_join()`, with the common variable being the parts' `colour_id`. We then omitted redundant columns and stored this in a variable named `part_colors`. Next, to retrieve the `year` variable, we merged the dataframe `part_colors` with `inventories` using the common variable `inventory_id`, then merged with the `sets` dataframe using the common variable `set_num`. We used `left_join()` for both merges, as the `part_colors` is the main dataframe and stored the resulting dataframe in the variable `part_colors_year`.
 
 ### Joining datasets and selecting columns
 ```{r data cleaning}
@@ -154,6 +154,7 @@ This is a plot of count against time, with each data point representing the numb
 # References
 Georgios Karamanis. (2022). LEGO dataset [Data set]. TidyTuesday. https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-09-06
 
+Zapper. (n.d.) The History of LEGO ® https://www.zapper.co.uk/blog/the-history-of-lego/#:~:text=In%201978%20LEGO%20began%20selling,therefore%20capitalise%20on%20popular%20culture
 
 
 
