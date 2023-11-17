@@ -149,12 +149,14 @@ For this scatter plot, our group has decided to focus on years after 1980 only, 
 This is a plot of count against time, with each data point representing the number of lego pieces of that color for a particular year. We added a LOESS curve for each color as well to make it easier for us to identify the general trends.
 
 # Discussions
+There is an overall increasing trend in the number of unique colors over the years from 1949 to 2022. This suggests that LEGO's color palette continues to evolve over time, producing new and diverse colors for their consumers. We have also noticed that the most popular colors consist of mostly monochromatic shades of black and primary colors, and this is due to their versatility and strong contrast in LEGO builds (Mylenium's Brick Corner, n.d.).
+
+Upon further inspection, we also recognise a few time periods where there were significant changes in the number of unique colors. The sudden spike in 1963 in Figure 2 was due to the founding of the company, Modulex, under LEGO. Marketed towards architects, the short-lived business created a variety of colors with names starting with “Modulex” (observed correspondingly in the same year in Figure 1). In addition, the increase in the number of unique colors in the 2000s (observed in both Figures 1 and 2) was due to the introduction of commercial themes beginning in the early 2000s (Zapper, n.d.). Both of these observations not only demonstrate the versatility of colors, but also highlights the significance of colors in LEGO. 
 
 
 # References
 Georgios Karamanis. (2022). LEGO dataset [Data set]. TidyTuesday. https://github.com/rfordatascience/tidytuesday/tree/master/data/2022/2022-09-06
 
+Mylenium's Brick Corner. (2022). Yellow Warning – A quick Analysis of LEGO’s new 2022 Color. https://myleniumsbrickcorner.wordpress.com/2022/01/25/yellow-warning-a-quick-analysis-of-legos-new-2022-color/
+
 Zapper. (n.d.) The History of LEGO ® https://www.zapper.co.uk/blog/the-history-of-lego/#:~:text=In%201978%20LEGO%20began%20selling,therefore%20capitalise%20on%20popular%20culture
-
-
-
