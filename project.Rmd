@@ -59,8 +59,8 @@ summary_stats
 ```
 
 # Visualisations
-### Line graph
-```{r line graph}
+### Line segment graph
+```{r line segment graph}
 # Find the lifespan of the colors 
 color_id_year_range = part_colors_set %>%
   filter(!is.na(year)) %>%
