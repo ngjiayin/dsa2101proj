@@ -45,9 +45,9 @@ Upon analysis of our cleaned dataset, we found that there are 13509 unique sets 
 ```{r summary stats}
 summary_stats = part_colors_year %>%
   summarise(
-    num_of_uniq_themes = n_distinct(theme_id),
-    num_of_uniq_sets = n_distinct(name_set),
-    num_of_uniq_colors = n_distinct(color_id),
+    num_uniq_themes = n_distinct(theme_id),
+    num_uniq_sets = n_distinct(name_set),
+    num_uniq_colors = n_distinct(color_id),
     least_color = names(which.min(table(name_color))),
     most_color = names(which.max(table(name_color))),
     year_range = paste(min(year, na.rm = TRUE), "-", max(year, na.rm = TRUE)),
