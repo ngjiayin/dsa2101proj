@@ -69,8 +69,8 @@ summary_stats
 ```
 
 
-```{r}
-# find most popular x colours from the entire data set
+```{r scatterplot}
+# find most popular 10 colours from data set
 top_10_colors = part_colors_set %>%
   count(name_color, rgb) %>%
   arrange(desc(n)) %>%
@@ -85,12 +85,15 @@ data = part_colors_set %>%
   count(year, name_color, wt = quantity)
 head(data)
 
+#plotting
 ggplot(data = data) +
   geom_point(aes(x = year, y = n, color = name_color)) +
   xlim(1980, 2022) +
   scale_color_manual(values = paste0("#", top_10_colors_rgb)) +
   geom_smooth(aes(x = year, y = n, color = name_color), se = FALSE, size = 0.5) +
-  labs(x = "Year", y = "Count", title = "Distribution of the top 10 colors across the year") +
-  theme(legend.position = "none")
+  labs(x = "Year", y = "Count", title = "Distribution of the top 10 colors across the year", color = "Colors") +
 ```
+For this scatterplot, our group has decided to focus on years after 1980 only, as the observations of those before 1980 were relatively small and cluttered, making it difficult to establish any meaningful relationships or trends. We chose to focus on the top 10 most popular colors only for the same reasons.
+This is a plot of count against time, with each data point representing the number of lego pieces of that color for a particular year. We added a LOESS curve for each color as well to make it easier for us to identify the general trends.
+From the figure above, we can see a general increasing trend for all the colors, with Black being the all time most popular color, followed by the grays and white. Number of Light Gray legos increased from 1980 to 2000, before decreasing steeply and then later discontinued around 2007, while other colors such as Dark Bluish Gray, Light Bluish Gray and Reddish Brown were only introduced in the early 2000s. Another interesting observation would be that the most popular colors consist of mostly neutral colors such as monochromatic shades of black and primary colors.
 
