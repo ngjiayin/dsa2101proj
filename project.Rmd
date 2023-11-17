@@ -8,18 +8,18 @@ date: "2023-11-17"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ### Importing libraries and loading datasets
-```{r}
+```{r data loading}
 library(tidyverse)
 colors = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/colors.csv.gz')
-inventories = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/inventories.csv.gz')
 inventory_parts = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/inventory_parts.csv.gz')
+inventories = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/inventories.csv.gz')
 sets = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/sets.csv.gz')
+inventory_sets = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-09-06/inventory_sets.csv.gz')
 ```
 
 ### Joining datasets and selecting columns
-```{r}
+```{r data cleaning}
 part_colors = inventory_parts %>%
   left_join(colors, by = c("color_id" = "id")) %>%
   select(-is_spare, -img_url, -is_trans)
@@ -32,36 +32,6 @@ part_colors_set = part_colors %>%
   select(-version, -img_url)
 head(part_colors_set)
 ```
-
-```{r}
-summary_stats = part_colors_set %>%
-  summarise(
-    num_of_uniq_themes = n_distinct(theme_id),
-    num_of_uniq_sets = n_distinct(name_set),
-    num_of_uniq_colors = n_distinct(color_id),
-    least_color = names(which.min(table(name_color))),
-    most_color = names(which.max(table(name_color))),
-    year_range = paste(min(year, na.rm = TRUE), "-", max(year, na.rm = TRUE)),
-    min_num_parts = min(num_parts, na.rm = TRUE),
-    max_num_parts = max(num_parts, na.rm = TRUE),
-    avg_num_parts = mean(num_parts, na.rm = TRUE)
-  )
-summary_stats
-```
-
-
-
-
-
-```
-
-```{r}
-
-```
-
-
-```
-
 
 ```{r line plot}
 # Find the lifespan of the colors 
@@ -93,9 +63,7 @@ ggplot(color_theme_life_span, aes(x = name, y = start_year)) +
         axis.ticks.y = element_blank())
 ```
 
-For this line segment plot, we decided to look at the lifespan of the colors in the lego data set over the years from 1949 to 2022. For each color, we determined the year it was introduced to the end of its existence. From the plot, it is clear that even though the number of colors introduced over time has increased, the lifespan of the colors introduced later became shorter. The "Vintage" colors such as Black, White, Red, Yellow, Green, Blue were introduced as the first few lego colors and were kept.
-
-From the plot, it shows an increase in the number of colours at the start of early 2000s however a sudden decrease after a few years around 2007.
+For this line segment plot, we decided to look at the lifespan of the colors in the lego data set over the years from 1949 to 2022. For each color, we determined the year it was introduced to the end of its existence. From the plot, it is clear that even though the number of colors introduced over time has increased, the lifespan of the colors introduced later became shorter. The first few colors introduced were the basic and primary colors such as Black, White, Red, Yellow, and Blue.
 
 ```{r scatterplot}
 # find most popular 10 colours from data set
@@ -119,9 +87,24 @@ ggplot(data = data) +
   xlim(1980, 2022) +
   scale_color_manual(values = paste0("#", top_10_colors_rgb)) +
   geom_smooth(aes(x = year, y = n, color = name_color), se = FALSE, size = 0.5) +
-  labs(x = "Year", y = "Count", title = "Distribution of the top 10 colors across the year", color = "Colors") +
+  labs(x = "Year", y = "Count", title = "Distribution of the top 10 colors across the year", color = "Colors")
 ```
+
 For this scatterplot, our group has decided to focus on years after 1980 only, as the observations of those before 1980 were relatively small and cluttered, making it difficult to establish any meaningful relationships or trends. We chose to focus on the top 10 most popular colors only for the same reasons.
 This is a plot of count against time, with each data point representing the number of lego pieces of that color for a particular year. We added a LOESS curve for each color as well to make it easier for us to identify the general trends.
-From the figure above, we can see a general increasing trend for all the colors, with Black being the all time most popular color, followed by the grays and white. Number of Light Gray legos increased from 1980 to 2000, before decreasing steeply and then later discontinued around 2007, while other colors such as Dark Bluish Gray, Light Bluish Gray and Reddish Brown were only introduced in the early 2000s. Another interesting observation would be that the most popular colors consist of mostly neutral colors such as monochromatic shades of black and primary colors.
+
+```{r bar graph}
+num_unique_year = part_colors_set %>%
+  mutate(rgb = paste0("#", rgb)) %>%
+  distinct(name_color, rgb, year)
+
+all_rbg = num_unique_year$rgb
+names(all_rbg) = all_rbg
+
+num_unique_year %>%
+  ggplot(aes(x=year, fill = I(rgb)))+
+  geom_bar()
+```
+
+The bar plot shows the number of unique colours in Lego sets in each year, from 1949 to 2022. Each bar is filled with the original Lego bricks' colours produced. There is an increase in the variety of colours from the beginning to early 2000s, with a sudden spike in 1963 (further explained in the Discussion section). The variety then decreases drastically before increasing gradually again.
 
