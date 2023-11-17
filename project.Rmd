@@ -32,8 +32,6 @@ part_colors = inventory_parts %>%
   left_join(colors, by = c("color_id" = "id")) %>%
   select(-is_spare, -img_url, -is_trans)
 
-sum(is.na(part_colors)) #no missing values
-
 part_colors_set = part_colors %>%
   left_join(inventories, by = c("inventory_id" = "id")) %>% #added "version" and "set_num"
   left_join(sets, by = "set_num", suffix = c("_color", "_set")) %>% #added "name_set" "year" "theme_id" "num_parts" "img_url"
@@ -113,7 +111,7 @@ num_unique_year %>%
   theme(plot.caption = element_text(hjust = 0.5, size = 10))
 ```
 
-The bar plot shows the number of unique colours in Lego sets in each year, from 1949 to 2022. Each bar is filled with the original Lego bricks' colours produced. There is an increase in the variety of colours from the beginning to early 2000s, with a sudden spike in 1963 (further explained in the Discussion section). The variety then decreases drastically before increasing gradually again.
+The bar plot shows the number of unique colours in Lego sets in each year, from 1949 to 2022. Each bar is filled with the original Lego bricks' colours produced, arranged alphabetically using RGB codes from top to bottom. There is an increase in the variety of colours from the beginning to early 2000s, with a sudden spike in 1963 (further explained in the Discussion section). The variety then decreases drastically before increasing gradually again.
 
 ### Scatter plot 
 ```{r scatter plot}
